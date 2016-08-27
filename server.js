@@ -8,9 +8,29 @@ var moment = require('moment');
 
 app.use(express.static(__dirname + '/public'));
 
+var clientInfo = {};
+
+// var clientInfo = {
+//     'some_socketiogenerated_key': {
+//         name: 'Andrew',
+//         room: 'LOTR'
+//     }
+// };
+
 io.on('connection', function (socket) {  // a particular connection
     console.log('User connected via socket.io!');
     var now = moment();
+
+    // use custom name, matching app
+    socket.on('joinRoom', function (req) {
+        clientInfo[socket.id] = req;
+        socket.join(req.room);
+        socket.broadcast.to(req.room).emit('message', {
+            name: 'System',
+            text: req.name + ' has joined!',
+            timestamp: moment().valueOf()
+        })
+    });
 
     // have server listen for messages
     socket.on('message', function (message) {
@@ -22,7 +42,7 @@ io.on('connection', function (socket) {  // a particular connection
         // the following, which doesn't send to sender
         // socket.broadcast.emit('message', message);
         // io.emit('message', message);
-        io.emit('message', message);
+        io.to(clientInfo[socket.id].room).emit('message', message);
     });
 
     // can have many events, e.g.

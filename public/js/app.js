@@ -8,9 +8,16 @@ console.log(name + " wants to join " + room + "!");
 // monitor w/dev tools
 socket.on('connect', function (){
     console.log('Connected to socket.io server!');
+    socket.emit('joinRoom', {  // must be consistent across FE/BE
+        name: name,
+        room: room
+    });
 });
 
 socket.on('message', function (message) {
+    // var $h1 = jQuery('.room-title');
+    // $h1.append(room);
+    jQuery('.room-title').text(room);  // can use .text and .html
     var momentTimestamp = moment.utc(message.timestamp);
     var $message = jQuery('.messages');
 
