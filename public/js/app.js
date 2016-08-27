@@ -7,8 +7,11 @@ socket.on('connect', function (){
 });
 
 socket.on('message', function (message) {
-    console.log('New message:');
+    console.log('New message: ');
     console.log(message.text);
+
+    // target by class, use . (id uses #, tag name uses tag name, e.g. input...)
+    jQuery('.messages').append('<p>' + message.text + '</p>'); // adds content into existing markup areas
 });
 
 // Handles submitting new message

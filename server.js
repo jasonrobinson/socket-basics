@@ -16,7 +16,8 @@ io.on('connection', function (socket) {  // a particular connection
 
         // io.emit, sends to everyone, including sender, so use
         // the following, which doesn't send to sender
-        socket.broadcast.emit('message', message);
+        // socket.broadcast.emit('message', message);
+        io.emit('message', message);
     })
 
     // can have many events, e.g.
