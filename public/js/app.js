@@ -1,5 +1,9 @@
 // on the front end
+var name = getQueryVariable('name') || 'Anonymous';
+var room = getQueryVariable('room');
 var socket = io();
+
+console.log(name + " wants to join " + room + "!");
 
 // monitor w/dev tools
 socket.on('connect', function (){
@@ -8,11 +12,16 @@ socket.on('connect', function (){
 
 socket.on('message', function (message) {
     var momentTimestamp = moment.utc(message.timestamp);
-    console.log('New message: ');
-    console.log(momentTimestamp + ': ' + message.text);
+    var $message = jQuery('.messages');
 
+    console.log('New message: ');
+    // console.log(momentTimestamp + ': ' + message.text);
+    console.log(message.text);
+
+    $message.append('<p><strong>' + message.name + ' ' + momentTimestamp.local().format('h:mm a') + '</strong></p>');
+    $message.append('<p>' + message.text + '</p>');
     // target by class, use . (id uses #, tag name uses tag name, e.g. input...)
-    jQuery('.messages').append('<p><strong>' + momentTimestamp.local().format('h:mm a') + ': </strong>' + message.text + '</p>'); // adds content into existing markup areas
+    // jQuery('.messages').append('<p><strong>' + momentTimestamp.local().format('h:mm a') + ': </strong>' + message.text + '</p>'); // adds content into existing markup areas
 });
 
 // Handles submitting new message
@@ -25,6 +34,7 @@ $form.on('submit', function (event) {
     var $message = $form.find('input[name=message]');
 
     socket.emit('message', {
+        name: name,
         text: $message.val()  // gets as a string
     });
 
@@ -32,3 +42,4 @@ $form.on('submit', function (event) {
     // $('#message-form')[0].reset();
     $message.val('');    
 });
+

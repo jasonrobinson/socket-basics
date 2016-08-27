@@ -27,6 +27,7 @@ io.on('connection', function (socket) {  // a particular connection
 
     // can have many events, e.g.
     socket.emit('message', {
+        name: 'System',
         text: 'Welcome to the chat application!',
         timestamp: moment().valueOf()
     });
@@ -35,3 +36,4 @@ io.on('connection', function (socket) {  // a particular connection
 http.listen(PORT, function () {
     console.log('Server started!');
 });
+
