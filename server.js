@@ -12,7 +12,7 @@ io.on('connection', function (socket) {  // a particular connection
 
     // have server listen for messages
     socket.on('message', function (message) {
-        console.log('Message received ' + message.text);
+        console.log('Message received: ' + message.text);
 
         // io.emit, sends to everyone, including sender, so use
         // the following, which doesn't send to sender
