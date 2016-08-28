@@ -19,7 +19,20 @@ var clientInfo = {};
 
 io.on('connection', function (socket) {  // a particular connection
     console.log('User connected via socket.io!');
-    var now = moment();
+
+    socket.on('disconnect', function () {
+        var userData = clientInfo[socket.id];
+
+        if (typeof userData !== 'undefined') {
+            socket.leave(userData.room);
+            io.to(userData.room).emit('message', {
+                name: 'System',
+                text: userData.name + ' has left!',
+                timestamp: moment().valueOf()
+            });
+            delete clientInfo[socket.id];
+        }
+    });  // this name is defined in socket.io
 
     // use custom name, matching app
     socket.on('joinRoom', function (req) {
