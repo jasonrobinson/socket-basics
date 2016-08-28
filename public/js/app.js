@@ -19,7 +19,8 @@ socket.on('message', function (message) {
     // $h1.append(room);
     jQuery('.room-title').text(room);  // can use .text and .html
     var momentTimestamp = moment.utc(message.timestamp);
-    var $message = jQuery('.messages');
+    var $messages = jQuery('.messages');
+    var $message = jQuery('<li class="list-group-item"></li>');
 
     console.log('New message: ');
     // console.log(momentTimestamp + ': ' + message.text);
@@ -29,6 +30,7 @@ socket.on('message', function (message) {
     $message.append('<p>' + message.text + '</p>');
     // target by class, use . (id uses #, tag name uses tag name, e.g. input...)
     // jQuery('.messages').append('<p><strong>' + momentTimestamp.local().format('h:mm a') + ': </strong>' + message.text + '</p>'); // adds content into existing markup areas
+    $messages.append($message);
 });
 
 // Handles submitting new message
